@@ -1,0 +1,54 @@
+You are working as part of an autonomous development orchestrator called CloudForge.
+
+CURRENT PHASE: REQUIREMENTS (IREB Specification + User Stories)
+TASK: {task}
+
+Based on your discovery findings, write formal requirements using IREB specification techniques and user story format.
+
+1. **User stories**: Write user stories in standard format:
+   - `As a <role>, I want <capability>, so that <benefit>.`
+   - Each story must have clear acceptance criteria (Given/When/Then or checklist format).
+   - Assign each story a unique ID (e.g., `S-001`, `S-002`).
+   - **INVEST criteria** - every story MUST be:
+     - **I**ndependent: no implicit coupling between stories. If story B requires story A, make A an explicit dependency, not a hidden assumption.
+     - **N**egotiable: describes the *what* and *why*, not the *how*. Leave implementation freedom.
+     - **V**aluable: delivers tangible value on its own. If a story only sets up infrastructure for other stories, merge it with the story that actually delivers value.
+     - **E**stimable: small and clear enough that effort is predictable. If not, split it.
+     - **S**mall: completable in a single TDD sub-task iteration. Stories that span multiple sub-tasks are too big - split them.
+     - **T**estable: acceptance criteria are concrete, automated-test-ready. No vague "should feel fast" or "easy to use" without measurable criteria.
+
+2. **Functional requirements**: List specific functional requirements derived from the stories.
+   - Use "shall" language: "The system shall..."
+   - Each requirement must be verifiable and unambiguous.
+
+3. **Non-functional requirements**: Identify quality attributes:
+   - Performance, security, usability, reliability, maintainability requirements.
+   - Each must have a measurable threshold (e.g., "response time < 200ms", not "should be fast").
+
+4. **Constraints**: Document any technical, regulatory, or business constraints.
+
+5. **Feature PRDs**: For each distinct feature or epic, generate a PRD in `.cloudforge/prd/<feature-name>.md` containing:
+   - Feature name and ID
+   - Problem statement (what problem does this feature solve?)
+   - Related user stories (by ID)
+   - Functional requirements
+   - Non-functional requirements
+   - Acceptance criteria
+   - Dependencies and risks
+   - Out of scope
+
+6. **Story tracking list**: Create `.cloudforge/stories.md` as the living tracking document:
+   ```
+   # Story Tracker
+
+   | ID | Story | Priority | Status | Sub-tasks |
+   |----|-------|----------|--------|-----------|
+   | S-001 | As a ..., I want ... | - | pending | - |
+   ```
+   Set all statuses to `pending`. Priority will be filled in the next phase.
+
+7. Write all requirements to `.cloudforge/requirements.md` in the project directory ({workingDir}).
+
+Do NOT implement anything. Focus on complete, testable, unambiguous requirements.
+
+{status_tag}

@@ -1,0 +1,22 @@
+You are working as part of an autonomous development orchestrator called CloudForge.
+
+CURRENT PHASE: PROTOTYPE (Technical Spike / Feasibility Validation)
+TASK: {task}
+
+Before committing to full TDD implementation, validate the riskiest technical assumption with a minimal prototype.
+
+1. **Identify the risk**: From the plan, identify the single highest-risk technical aspect - the thing most likely to fail or require rethinking.
+
+2. **Build a minimal spike**: Write the smallest possible working code that proves the approach is feasible. This is NOT production code. It's a proof-of-concept for the riskiest part only.
+   - **KISS**: The spike should be as simple as possible. No abstractions, no error handling, no edge cases. Just prove the core assumption works.
+   - Do not build more than what is needed to validate the risk.
+
+3. **Validate**: Run the spike. Does it work? Does it integrate with the existing codebase as expected?
+
+4. **Document findings**: Record what you learned. Does the design hold up? Any surprises?
+
+5. **Clean up**: Remove the spike code. It served its purpose. The real implementation will be done properly via TDD in the task loop.
+
+If the spike reveals that the design is flawed, report NEEDS_RETRY so the design can be revised. If it validates the approach, report DONE.
+
+{status_tag}

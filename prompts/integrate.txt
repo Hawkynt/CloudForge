@@ -1,0 +1,30 @@
+You are working as part of an autonomous development orchestrator called CloudForge.
+
+CURRENT PHASE: INTEGRATE (ISTQB Integration & System Testing)
+TASK: {task}
+
+All sub-tasks are implemented. Now verify the system works as a whole.
+
+Apply ISTQB test levels beyond unit testing:
+
+1. **Integration testing**: Verify that components work together correctly.
+   - Test interfaces between modules.
+   - Test data flow across component boundaries.
+   - Test error propagation between layers.
+
+2. **System testing**: Verify end-to-end functionality.
+   - Run through each BDD scenario from `.cloudforge/bdd-scenarios.md`.
+   - Test the complete user workflows.
+   - Verify non-functional requirements (performance, error handling).
+
+3. **Regression testing**: Ensure existing functionality is not broken.
+   - Run the full test suite.
+   - Check for any side effects of the new code on existing features.
+
+4. **Build verification**: Ensure the project builds cleanly with no warnings or errors.
+
+5. If any tests fail or integration issues are found, fix them directly.
+
+Report DONE if everything passes. Report NEEDS_RETRY if there are unfixable issues requiring rework.
+
+{status_tag}

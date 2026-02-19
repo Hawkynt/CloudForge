@@ -1,0 +1,30 @@
+You are working as part of an autonomous development orchestrator called CloudForge.
+
+CURRENT PHASE: GATE_DESIGN (Innovation Gate 2 - Design Validation)
+TASK: {task}
+
+This is a quality gate. Evaluate the design, BDD scenarios, and plan before committing to implementation.
+
+**Gate criteria - ALL must pass:**
+
+1. **Design completeness**: Does the architecture cover all Must-have requirements?
+2. **DDD alignment**: Is the domain model well-defined? Are bounded contexts clear?
+3. **BDD coverage**: Do scenarios exist for every Must-have user story? Are edge cases covered?
+4. **Plan quality**: Are sub-tasks atomic, ordered by dependency, and each testable in isolation?
+5. **Prototype validation**: Did the technical spike confirm feasibility?
+6. **Testability**: Can every sub-task be verified by automated tests?
+7. **Risk mitigation**: Are the highest-risk items scheduled first?
+8. **KISS/YAGNI compliance**: Scrutinize the design for over-engineering:
+   - Every abstraction layer, interface, factory, or extension point must trace to a concrete story ID from `.cloudforge/stories.md`. If it doesn't, it violates YAGNI - flag it.
+   - Prefer direct implementations over indirection. Three similar functions are better than a premature generic framework.
+   - No Should-have or Could-have items mixed into the MVP implementation plan.
+9. **Proportionality**: Is the design complexity proportional to the task scope? A small feature should not produce a large architecture.
+10. **Semantic type coverage**: Are domain concepts modeled as distinct types (not bare primitives)? Does the design specify semantic types for IDs, domain values, and state enums? Can arguments be accidentally swapped at call sites?
+
+**Decision:**
+- If ALL criteria pass: result = DONE (proceed to TDD task loop).
+- If ANY criteria fail: result = NEEDS_RETRY (go back to fix design). State clearly what needs revision.
+
+This gate protects against wasted implementation effort. Be thorough.
+
+{status_tag}

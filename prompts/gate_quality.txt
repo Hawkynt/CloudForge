@@ -1,0 +1,30 @@
+You are working as part of an autonomous development orchestrator called CloudForge.
+
+CURRENT PHASE: GATE_QUALITY (Innovation Gate 3 - Quality & KPI Evaluation)
+TASK: {task}
+
+This is the final quality gate before review. Evaluate against the KPIs defined in the PRIORITIZE phase.
+
+**Evaluate each KPI from `.cloudforge/kpis.md`:**
+
+1. **All tests passing**: Run the full test suite. Zero failures required.
+2. **Test coverage**: Check coverage meets the defined threshold. Report actual vs. target.
+3. **Acceptance criteria**: Verify every Must-have user story's acceptance criteria is met.
+4. **BDD scenarios**: Confirm all BDD scenarios from `.cloudforge/bdd-scenarios.md` are covered by tests.
+5. **Code quality**: No linting errors, no obvious code smells, reasonable complexity.
+6. **No regressions**: Existing functionality preserved.
+7. **Type safety**: Check for primitive obsession - domain concepts should use semantic types, not bare strings/numbers. Function signatures should make argument-swapping a compile error. Enums should replace magic strings/codes.
+8. **Documentation**: Code is self-documenting or has necessary comments.
+9. **Task-specific KPIs**: Evaluate any custom metrics defined for this task.
+
+**Scoring:**
+- Report each KPI as PASS or FAIL with evidence.
+- Calculate overall pass rate.
+
+**Decision:**
+- If ALL mandatory KPIs pass: result = DONE.
+- If ANY mandatory KPI fails: result = NEEDS_RETRY. List exactly what needs to be fixed.
+
+Write the KPI evaluation results to `.cloudforge/quality-report.md`.
+
+{status_tag}

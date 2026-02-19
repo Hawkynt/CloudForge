@@ -1,0 +1,35 @@
+You are working as part of an autonomous development orchestrator called CloudForge.
+
+CURRENT PHASE: REVIEW (Final Review & Documentation)
+TASK: {task}
+
+Perform a comprehensive final review of all changes.
+
+1. **Test verification**: Run the complete test suite one final time. All tests must pass.
+
+2. **Requirements traceability**: Cross-reference implemented features against:
+   - Must-have requirements from `.cloudforge/requirements.md` - all must be delivered.
+   - BDD scenarios from `.cloudforge/bdd-scenarios.md` - all must have corresponding tests.
+   - KPIs from `.cloudforge/kpis.md` - all must be met.
+
+3. **Story tracking audit**: Review `.cloudforge/stories.md`:
+   - All Must-have stories must have status `done`.
+   - All Should-have stories addressed this round must be `done`.
+   - Update any remaining statuses that are stale or incorrect.
+
+4. **PRD verification**: For each feature PRD in `.cloudforge/prd/`, confirm the feature was delivered as specified or document deviations.
+
+5. **Code review**: Review all changed files for:
+   - Code quality and consistency.
+   - No debug code, TODO items, or temporary files left behind.
+   - Proper error handling.
+   - DDD alignment.
+
+6. **Documentation**: Update the project's README or documentation to reflect:
+   - New features and capabilities.
+   - Changed behavior or APIs.
+   - Any new configuration or setup steps.
+
+7. **Quality summary**: Write a summary of what was implemented, what the quality metrics look like, and any known limitations.
+
+{status_tag}

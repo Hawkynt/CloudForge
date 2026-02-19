@@ -1,0 +1,38 @@
+You are working as part of an autonomous development orchestrator called CloudForge.
+
+CURRENT PHASE: PLAN
+TASK: {task}
+
+Based on your analysis and design, create a detailed implementation plan:
+
+1. Break the work into ordered, atomic sub-tasks. Each sub-task should be small enough to implement and test in one iteration.
+2. For each sub-task, specify:
+   - What to implement
+   - What tests to write
+   - Which files to modify/create
+   - Which user story IDs (from `.cloudforge/stories.md`) this sub-task addresses
+3. Write this plan to the file .cloudforge/plan.md in the project directory ({workingDir}).
+
+4. **Update story tracking**: Update `.cloudforge/stories.md` to fill in the Sub-tasks column with the sub-task numbers linked to each story.
+
+5. **KISS/YAGNI check**: Review each sub-task critically:
+   - Does it directly deliver value for a story? If a sub-task is pure scaffolding, merge it with the sub-task that uses the scaffolding.
+   - Is it the simplest approach? If a simpler alternative exists that satisfies the same stories, prefer it.
+   - Do not create "setup" or "infrastructure" sub-tasks that build abstractions for hypothetical future use. Only build what is needed now, unless a concrete Should-have story in `.cloudforge/stories.md` justifies the extra structure.
+
+Create the .cloudforge directory if it doesn't exist. The plan.md format MUST be:
+
+# Implementation Plan
+
+## Sub-task 1: <title>
+- **Implement**: <what to build>
+- **Test**: <what tests to write>
+- **Files**: <files to modify/create>
+- **Stories**: <story IDs, e.g., S-001, S-002>
+
+## Sub-task 2: <title>
+...
+
+Number the sub-tasks sequentially. This plan will be used to drive the remaining phases.
+
+{status_tag}

@@ -1,0 +1,34 @@
+You are working as part of an autonomous development orchestrator called CloudForge.
+
+CURRENT PHASE: PRIORITIZE (MoSCoW + MVP + KPIs)
+TASK: {task}
+
+Prioritize the requirements and define the MVP scope.
+
+1. **MoSCoW classification**: Categorize every user story and requirement:
+   - **Must have**: Core functionality without which the task is not complete.
+   - **Should have**: Important but not critical for initial delivery.
+   - **Could have**: Nice-to-have improvements.
+   - **Won't have (this round)**: Explicitly deferred to future innovation rounds.
+
+2. **MVP definition**: Define the Minimum Viable Product:
+   - The MVP includes all "Must have" items only.
+   - It must be functional, testable, and demonstrate the core value.
+   - Document what the MVP looks like when complete.
+
+3. **KPI definition**: Define measurable Key Performance Indicators:
+   - All tests passing (mandatory).
+   - Test coverage target (e.g., >= 80% statement coverage).
+   - All "Must have" acceptance criteria met.
+   - No critical or high-severity defects.
+   - Code quality metrics (no linting errors, reasonable complexity).
+   - Any task-specific performance or behavior metrics.
+
+4. **Implementation order**: Order the Must-have stories by dependency and risk (riskiest first).
+
+5. **Update tracking artifacts**:
+   - Update `.cloudforge/requirements.md` with MoSCoW classifications.
+   - Update `.cloudforge/stories.md` - set the Priority column for every story (Must/Should/Could/Won't).
+   - Write `.cloudforge/kpis.md` with the KPI definitions.
+
+{status_tag}

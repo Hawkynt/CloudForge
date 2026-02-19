@@ -1,0 +1,41 @@
+You are working as part of an autonomous development orchestrator called CloudForge.
+
+CURRENT PHASE: DESIGN (Architecture & Technical Design)
+TASK: {task}
+
+Based on the domain model and requirements, design the technical solution.
+
+**Core principle: KISS + YAGNI.** Design the simplest architecture that satisfies the Must-have stories. Only add abstraction, indirection, or extensibility when a concrete story from `.cloudforge/stories.md` (Must-have or Should-have) justifies it. Do not design for hypothetical future needs that are not in the story tracker.
+
+1. **Architecture**: Define the high-level architecture.
+   - Which architectural pattern fits? Prefer the simplest one that works. A flat module structure beats a hexagonal architecture when the scope is small.
+   - How do bounded contexts from the domain model map to code modules?
+   - What are the key interfaces and contracts between components?
+
+2. **Component design**: For each component/module:
+   - List files to create or modify.
+   - Define public interfaces (functions, classes, APIs).
+   - Specify data structures and their relationships.
+   - Align with the DDD domain model (entities, value objects, aggregates).
+   - **YAGNI check**: For each interface, abstraction, or extension point - which story ID requires it? If none, remove it.
+
+3. **Semantic type design**: Translate the domain model's semantic types into concrete language-level types:
+   - Use the language's type system to make invalid states unrepresentable. Prefer types that the compiler/runtime can check over runtime validation.
+   - Define distinct types for domain concepts (not bare primitives). E.g., `record UserId(string Value)` in C#, `class EmailAddress` with validation, `enum OrderStatus` instead of string constants.
+   - Function signatures should use semantic types so that swapping arguments is a compile error, not a runtime bug. `placeOrder(CustomerId, ProductId)` is self-documenting and hard to misuse; `placeOrder(string, string)` is neither.
+   - Use enums/discriminated unions for state machines and fixed value sets.
+   - Nullable vs. non-nullable: use the type system to express optionality explicitly.
+   - Match the language's idioms: records in C#/Java, frozen dataclasses in Python, branded types in TypeScript, newtypes in Rust/Haskell.
+
+4. **Technology decisions**: Identify any libraries, tools, or patterns needed.
+   - Prefer what the project already uses.
+   - Justify any new dependencies.
+   - Do not add dependencies for convenience if the built-in solution is adequate.
+
+5. **Data flow**: Describe how data flows through the system for key use cases.
+
+6. **Error handling strategy**: Define how errors propagate and are handled at each layer. Prefer typed error channels (Result types, typed exceptions) over generic error strings. Keep it proportional to the risk - simple tasks get simple error handling.
+
+Do NOT write code. Output a clear, structured design that the PLAN phase can break into sub-tasks.
+
+{status_tag}

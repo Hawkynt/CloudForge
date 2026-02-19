@@ -1,0 +1,90 @@
+# CloudForge Innovation-Driven Development Workflow
+#
+# Syntax:  PHASE -> NEXT_PHASE [condition]
+# Conditions: done, retry, retry_exhausted, done_next_subtask
+# Phases marked with * are part of the task loop (repeated per sub-task).
+# END = terminal state (workflow complete).
+#
+# The prompt template for each phase is: prompts/<phase_lowercase>.txt
+# To add a phase: add its transitions here + create the .txt file.
+# To remove a phase: delete its lines here.
+#
+# Methodologies embedded:
+#   IREB (requirements) | DDD (domain) | BDD (behavior) | TDD (test-first)
+#   ISTQB (test design) | MoSCoW (prioritization) | MVP (scope)
+#   Innovation rounds | Innovation gates | KPIs
+
+# ── Phase 1: Discovery (IREB elicitation) ──
+DISCOVER        -> REQUIREMENTS    [done]
+DISCOVER        -> DISCOVER        [retry]
+
+# ── Phase 2: Requirements Engineering (IREB specification, user stories) ──
+REQUIREMENTS    -> PRIORITIZE      [done]
+REQUIREMENTS    -> REQUIREMENTS    [retry]
+
+# ── Phase 3: Prioritization (MoSCoW, MVP scope, KPI definition) ──
+PRIORITIZE      -> GATE_SCOPE      [done]
+PRIORITIZE      -> PRIORITIZE      [retry]
+
+# ── Innovation Gate 1: Scope validation ──
+GATE_SCOPE      -> DOMAIN          [done]
+GATE_SCOPE      -> REQUIREMENTS    [retry]
+GATE_SCOPE      -> DOMAIN          [retry_exhausted]
+
+# ── Phase 5: Domain Modeling (DDD) ──
+DOMAIN          -> DESIGN          [done]
+DOMAIN          -> DOMAIN          [retry]
+
+# ── Phase 6: Architecture & Design ──
+DESIGN          -> BDD             [done]
+DESIGN          -> DESIGN          [retry]
+
+# ── Phase 7: Behavior Specification (BDD scenarios) ──
+BDD             -> PLAN            [done]
+BDD             -> BDD             [retry]
+
+# ── Phase 8: Implementation Planning ──
+PLAN            -> PROTOTYPE       [done]
+PLAN            -> PLAN            [retry]
+
+# ── Phase 9: Prototype / Spike (validate riskiest assumption) ──
+PROTOTYPE       -> GATE_DESIGN     [done]
+PROTOTYPE       -> PROTOTYPE       [retry]
+
+# ── Innovation Gate 2: Design validation ──
+GATE_DESIGN     -> TEST            [done]
+GATE_DESIGN     -> DESIGN          [retry]
+GATE_DESIGN     -> TEST            [retry_exhausted]
+
+# ── Task Loop (per sub-task from plan.md) ──
+
+*TEST           -> IMPLEMENT       [done]
+*TEST           -> TEST            [retry]
+
+*IMPLEMENT      -> VERIFY          [done]
+*IMPLEMENT      -> IMPLEMENT       [retry]
+
+*VERIFY         -> REFACTOR        [done]
+*VERIFY         -> IMPLEMENT       [retry]
+*VERIFY         -> REFACTOR        [retry_exhausted]
+
+*REFACTOR       -> INTEGRATE       [done]
+*REFACTOR       -> TEST            [done_next_subtask]
+*REFACTOR       -> REFACTOR        [retry]
+
+# ── Phase 15: Integration Testing (ISTQB integration/system level) ──
+INTEGRATE       -> GATE_QUALITY    [done]
+INTEGRATE       -> INTEGRATE       [retry]
+
+# ── Innovation Gate 3: Quality & KPI evaluation ──
+GATE_QUALITY    -> REVIEW          [done]
+GATE_QUALITY    -> INTEGRATE       [retry]
+GATE_QUALITY    -> REVIEW          [retry_exhausted]
+
+# ── Phase 17: Final Review & Documentation ──
+REVIEW          -> INNOVATE        [done]
+REVIEW          -> REVIEW          [retry]
+
+# ── Phase 18: Innovation Assessment (loop or finish) ──
+INNOVATE        -> DISCOVER        [retry]
+INNOVATE        -> END             [done]

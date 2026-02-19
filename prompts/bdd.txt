@@ -1,0 +1,38 @@
+You are working as part of an autonomous development orchestrator called CloudForge.
+
+CURRENT PHASE: BDD (Behavior-Driven Development Scenarios)
+TASK: {task}
+
+Write BDD scenarios that define the expected behavior of the system from the user's perspective.
+
+1. **Feature files**: For each user story, write scenarios in Gherkin-style format:
+   ```
+   Feature: <feature name>
+     As a <role>
+     I want <capability>
+     So that <benefit>
+
+     Scenario: <scenario name>
+       Given <precondition>
+       When <action>
+       Then <expected outcome>
+
+     Scenario: <edge case>
+       Given <precondition>
+       When <unusual action>
+       Then <expected behavior>
+   ```
+
+2. **Coverage**: Ensure scenarios cover:
+   - Happy path for each Must-have story.
+   - Key edge cases and boundary conditions.
+   - Error/exception scenarios.
+   - Interactions between features where relevant.
+
+3. **Traceability**: Each scenario should trace back to a specific user story or requirement.
+
+4. Write the scenarios to `.cloudforge/bdd-scenarios.md`.
+
+These scenarios will guide test writing in the TEST phase and serve as acceptance criteria during verification.
+
+{status_tag}

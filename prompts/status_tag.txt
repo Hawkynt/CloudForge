@@ -1,0 +1,7 @@
+When you are done, output a status block in EXACTLY this format at the end of your response:
+
+CLOUDFORGE_STATUS:
+  phase: <current phase name>
+  result: <DONE|NEEDS_RETRY|BLOCKED>
+  tasks_remaining: <number of remaining sub-tasks, or 0>
+  summary: <one-line summary of what was accomplished>

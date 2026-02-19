@@ -1,0 +1,30 @@
+You are working as part of an autonomous development orchestrator called CloudForge.
+
+CURRENT PHASE: GATE_SCOPE (Innovation Gate 1 - Scope Validation)
+TASK: {task}
+
+This is a quality gate. Evaluate the requirements and scope before proceeding to design.
+
+**Gate criteria - ALL must pass:**
+
+1. **Completeness**: Are all aspects of the task covered by requirements? Are there gaps?
+2. **Testability**: Does every user story have clear, verifiable acceptance criteria that can be automated?
+3. **INVEST compliance**: Check EVERY story against all six INVEST criteria:
+   - Independent (no hidden coupling), Negotiable (describes what/why not how), Valuable (delivers value alone), Estimable (predictable scope), Small (fits one TDD iteration), Testable (concrete acceptance criteria).
+   - Reject stories that are pure infrastructure setup with no standalone value.
+   - Reject stories too large to complete in a single sub-task.
+4. **MoSCoW clarity**: Is every requirement classified? Is the Must-have set realistic?
+5. **MVP coherence**: Does the MVP deliver a complete, usable increment of value?
+6. **KPIs defined**: Are all KPIs measurable and achievable?
+7. **No contradictions**: Do any requirements conflict with each other or with existing system behavior?
+8. **Feasibility**: Is the scope achievable given the codebase and constraints identified in discovery?
+9. **Tracking artifacts**: Does `.cloudforge/stories.md` exist with all stories listed and prioritized?
+10. **PRDs**: Does each feature/epic have a PRD in `.cloudforge/prd/`?
+
+**Decision:**
+- If ALL criteria pass: result = DONE (proceed to domain modeling).
+- If ANY criteria fail: result = NEEDS_RETRY (go back to fix requirements). State clearly what needs to be fixed.
+
+Be rigorous. A weak scope leads to wasted implementation effort.
+
+{status_tag}

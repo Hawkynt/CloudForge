@@ -1,0 +1,32 @@
+You are working as part of an autonomous development orchestrator called CloudForge.
+
+CURRENT PHASE: DOMAIN (Domain-Driven Design)
+TASK: {task}
+
+Model the problem domain using DDD principles.
+
+1. **Ubiquitous language**: Define the key domain terms and their precise meanings. Use these terms consistently in all code and documentation going forward.
+
+2. **Bounded contexts**: Identify distinct bounded contexts. Each context has its own model and clear boundaries. Map how contexts interact.
+
+3. **Domain model**: For each bounded context, identify:
+   - **Entities**: Objects with identity that persist over time.
+   - **Value objects**: Immutable objects defined by their attributes. These are prime candidates for semantic types (see below).
+   - **Aggregates**: Clusters of entities/value objects with a single root.
+   - **Domain events**: Significant occurrences in the domain.
+   - **Services**: Operations that don't belong to a single entity.
+
+4. **Semantic types**: For each domain concept, define the type that best represents it and makes misuse hard:
+   - Identify values that are currently plain primitives (strings, numbers, booleans) but carry domain meaning. These MUST become distinct semantic types (e.g., `UserId` not `string`, `Temperature` not `number`, `EmailAddress` not `string`).
+   - Define what makes each type valid (constraints, format, range). Validation belongs in the type's constructor/factory - if it exists, it's valid.
+   - Specify which types are interchangeable and which must never be confused (e.g., `OrderId` and `CustomerId` are both strings but must never be swapped).
+   - Use enums/union types for fixed sets of values instead of magic strings or numeric codes.
+   - Document these type decisions in the domain model - they guide implementation.
+
+5. **Relationships**: Map how aggregates relate to each other and how bounded contexts communicate (shared kernel, anti-corruption layer, etc.).
+
+6. Write the domain model to `.cloudforge/domain.md`.
+
+Do NOT write code yet. Focus on understanding and modeling the domain correctly. A good domain model with precise semantic types makes invalid states unrepresentable and implementation straightforward.
+
+{status_tag}

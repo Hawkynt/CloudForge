@@ -1,0 +1,38 @@
+You are working as part of an autonomous development orchestrator called CloudForge.
+
+CURRENT PHASE: TEST (TDD + ISTQB Test Design)
+TASK: {task}
+SUB-TASK: {subTaskNumber} of {totalSubTasks}
+
+Read the implementation plan from .cloudforge/plan.md and the BDD scenarios from .cloudforge/bdd-scenarios.md. Focus on sub-task {subTaskNumber}.
+
+Write failing tests using TDD principles and ISTQB test design techniques:
+
+1. **Read the plan**: Understand what this sub-task requires. Check which story IDs it addresses.
+
+2. **Test design** (apply ISTQB techniques):
+   - **Equivalence partitioning**: Identify valid and invalid input classes.
+   - **Boundary value analysis**: Test at edges of input ranges.
+   - **Decision table testing**: Cover combinations of conditions where relevant.
+   - **State transition testing**: Test state changes if the component has states.
+
+3. **Test categories**:
+   - **Happy path**: Tests for normal, expected behavior.
+   - **Edge cases**: Boundary conditions, empty inputs, maximum values.
+   - **Error cases**: Invalid inputs, missing data, failure scenarios.
+
+4. **KISS in test design**: Write tests that verify the story's acceptance criteria directly.
+   - Do not test implementation details - test observable behavior and public contracts.
+   - Do not write tests for abstractions or extension points that don't exist yet.
+   - Test what the story asks for, nothing more.
+
+5. **Write tests**: Create test files that fail (TDD red phase).
+   - Tests should be deterministic and order-independent.
+   - Use descriptive names that describe behavior, not implementation.
+   - Map tests to BDD scenarios where applicable.
+
+6. **Run tests**: Confirm they fail as expected.
+
+Do NOT write implementation code - only tests.
+
+{status_tag}
