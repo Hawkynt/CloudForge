@@ -119,7 +119,7 @@ node forge.js --continue-session <session-id>
 ### Testing
 
 ```bash
-node --test Forge/tests/
+node --test tests/*.test.js
 ```
 
 ## Structure
@@ -134,6 +134,7 @@ Forge/
     ratelimit.js        # Rate limit detection, countdown timer, auto-retry
     phases.js           # Phase engine, workflow.dot parser, template system
     state.js            # Workflow state, progress tracking, circuit breaker
+    transient.js        # Transient API error detection (500/502/503, connection errors)
   prompts/
     workflow.dot        # Workflow state machine (DOT-like graph format)
     discover.txt        # IREB elicitation
@@ -161,6 +162,8 @@ Forge/
     ratelimit.test.js   # Rate limit handler tests (33 tests)
     phases.test.js      # Phase engine tests (89 tests)
     state.test.js       # State manager tests (79 tests)
+    transient.test.js   # Transient error detection tests (12 tests)
+    forge-status.test.js # Status synthesis tests (4 tests)
   ReadMe.md
 ```
 
@@ -213,6 +216,9 @@ Forge/
 - [x] Graceful Ctrl+C shutdown with state save
 - [x] Verbose/debug mode (`-v`)
 - [x] Agent crash detection
+- [x] Transient API error detection (500/502/503, connection errors) with automatic retry
+- [x] Null-status synthesis (agents that omit CLOUDFORGE_STATUS trigger retry, not silent advance)
+- [x] API contract/signature verification in quality gates (VERIFY, REVIEW, GATE_QUALITY)
 
 ## Planned Features
 

@@ -24,6 +24,12 @@ This is the final quality gate before review. Evaluate against the KPIs defined 
 8. **Type safety**: Check for primitive obsession - domain concepts should use semantic types, not bare strings/numbers. Function signatures should make argument-swapping a compile error. Enums should replace magic strings/codes.
 9. **Documentation**: Code is self-documenting or has necessary comments.
 10. **Task-specific KPIs**: Evaluate any custom metrics defined for this task.
+11. **API contract correctness**: For every external library or framework used, verify that:
+    - Function calls match documented signatures (argument count, types, order).
+    - Component props/attributes match the library API (no misspelled or deprecated props).
+    - Return values and async patterns are handled correctly.
+    - No silent failures from API misuse (blank renders, undefined results, dead handlers).
+    - **Show evidence**: list each library API usage point and confirm correctness.
 
 **Scoring:**
 - Report each KPI as PASS or FAIL.

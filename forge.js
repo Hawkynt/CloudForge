@@ -7,6 +7,26 @@ const runner = require('./lib/runner');
 const ratelimit = require('./lib/ratelimit');
 const phases = require('./lib/phases');
 const state = require('./lib/state');
+const transient = require('./lib/transient');
+
+// ── Status Synthesis ──
+
+function synthesizeStatus(result, currentPhase) {
+  if (result.status) return result.status;
+  if (!result.success)
+    return {
+      phase: currentPhase,
+      result: 'NEEDS_RETRY',
+      tasksRemaining: null,
+      summary: 'Agent crashed without reporting status',
+    };
+  return {
+    phase: currentPhase,
+    result: 'NEEDS_RETRY',
+    tasksRemaining: null,
+    summary: 'Agent completed without CLOUDFORGE_STATUS block',
+  };
+}
 
 // ── CLI Argument Parsing ──
 
@@ -285,7 +305,16 @@ async function main() {
         continue;
       }
 
-      break; // No rate limit, proceed
+      // Check for transient API errors (500/502/503, connection errors)
+      const te = transient.detectTransientError(result.exitCode, result.stderr, result.output);
+      if (te) {
+        tui.warnMessage(`Transient error detected: ${te.reason} — retrying with backoff...`);
+        await ratelimit.handleRateLimit(0, rateLimitAttempt, maxRateLimitAttempts, args.rateLimitWait);
+        ++rateLimitAttempt;
+        continue;
+      }
+
+      break; // No rate limit or transient error, proceed
     }
 
     if (rateLimitAttempt >= maxRateLimitAttempts) {
@@ -304,7 +333,13 @@ async function main() {
     }
 
     // Parse FORGE_STATUS from output
-    const status = phases.parseCloudForgeStatus(result.output);
+    let status = phases.parseCloudForgeStatus(result.output);
+
+    // Synthesize status if agent didn't emit CLOUDFORGE_STATUS block
+    if (!status) {
+      status = synthesizeStatus({ status: null, success: result.success }, currentPhase);
+      tui.warnMessage(`No CLOUDFORGE_STATUS block — synthesized: ${status.summary}`);
+    }
 
     // Record iteration
     state.recordIteration(wfState, currentPhase, status, result.tokensUsed);
@@ -368,10 +403,15 @@ async function main() {
   return 0;
 }
 
-main().then((code) => {
-  process.exitCode = code || 0;
-}).catch((err) => {
-  tui.errorMessage(err.message);
-  process.stderr.write(err.stack + '\n');
-  process.exitCode = 1;
-});
+// Export for testing
+module.exports = { synthesizeStatus };
+
+if (require.main === module) {
+  main().then((code) => {
+    process.exitCode = code || 0;
+  }).catch((err) => {
+    tui.errorMessage(err.message);
+    process.stderr.write(err.stack + '\n');
+    process.exitCode = 1;
+  });
+}

@@ -37,7 +37,14 @@ Run the full test suite and perform ISTQB-level verification.
    - Only if you have concrete evidence (file contents, test output, reachability) that ALL acceptance criteria are met, update `.cloudforge/stories.md` to set the story status to `done`.
    - If any criterion cannot be verified with evidence, leave the story as `in progress`.
 
+8. **API contract & signature verification**: For each external library, framework component, or module API used in this sub-task:
+   - **Check that function/method calls match the actual signatures** — correct number of arguments, correct types, correct argument order. Read the library's type definitions or docs if available.
+   - **Verify component props/attributes match the library's API** — no misspelled prop names, no deprecated APIs, no missing required props/parameters.
+   - **Check return value handling** — are return types used correctly? Are promises awaited? Are callbacks structured properly?
+   - **Look for silent failures** — components that render empty/blank because of wrong props, functions that return undefined because of wrong arguments, event handlers that never fire because of wrong binding.
+   - If you find any API misuse, report NEEDS_RETRY with specific details of the mismatch.
+
 Set result to DONE only if all tests pass AND you have shown the evidence.
-Set result to NEEDS_RETRY if any tests fail, quality issues are found, or you cannot verify stories with evidence.
+Set result to NEEDS_RETRY if any tests fail, quality issues are found, API misuse is detected, or you cannot verify stories with evidence.
 
 {status_tag}

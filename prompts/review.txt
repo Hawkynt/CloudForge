@@ -33,6 +33,7 @@ Perform a comprehensive final review of all changes.
    - No debug code, TODO items, or temporary files left behind.
    - Proper error handling.
    - DDD alignment.
+   - API contract correctness: verify all library/framework/component usage matches actual API signatures (argument count, types, prop names, return types). Flag any misuse that could cause silent failures (blank renders, undefined returns, dead handlers).
 
 7. **Documentation**: Update the project's README or documentation to reflect:
    - New features and capabilities.
