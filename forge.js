@@ -80,10 +80,10 @@ function parseArgs(argv) {
 
 function printUsage() {
   const text = `
-Usage: cloudforge <task> [options]
+Usage: cloudforge [task] [options]
 
 Arguments:
-  <task>                  Task description (required unless --continue-session)
+  [task]                  Task description (auto-resumes from .cloudforge/ if omitted)
 
 Options:
   --max-iterations <n>    Max agent invocations (default: 25)
@@ -91,7 +91,7 @@ Options:
   --model <name>          Model to use: sonnet|opus|haiku
   --working-dir <path>    Project directory (default: cwd)
   --max-turns <n>         Max agentic turns per invocation (default: 50)
-  --continue-session <id> Resume a previous CloudForge session
+  --continue-session <id> Resume a previous CloudForge session (legacy)
   --dry-run               Show planned phases without executing
   --rate-limit-wait <s>   Max seconds to wait on rate limit (default: 43200/12h)
   --cli-path <path>       Path to agent CLI
@@ -106,13 +106,6 @@ Options:
 async function main() {
   const args = parseArgs(process.argv.slice(2));
 
-  // Validate
-  if (!args.task && !args.continueSession) {
-    tui.errorMessage('No task provided. Use: cloudforge "your task description"');
-    printUsage();
-    return 1;
-  }
-
   // Dry run mode
   if (args.dryRun) {
     tui.banner(args.task || '(no task)', args.model, args.maxIterations);
@@ -120,31 +113,62 @@ async function main() {
     return 0;
   }
 
+  // Get ordered phase list (needed for repair/recovery and progress visualization)
+  const allPhaseNames = phases.getOrderedPhaseNames();
+
   // Initialize or resume state
   let wfState;
   if (args.continueSession) {
+    // Explicit --continue-session flag
     wfState = state.loadState(args.workingDir);
     if (!wfState) {
       tui.errorMessage(`No saved state found in ${args.workingDir}/.cloudforge/state.json`);
       return 1;
     }
+    state.repairState(wfState, allPhaseNames);
     if (!args.task)
       args.task = wfState.task;
     tui.warnMessage(`Resuming session from phase: ${wfState.phase}, iteration: ${wfState.iteration}`);
-  } else {
+  } else if (args.task) {
+    // Fresh start with explicit task
     wfState = state.createInitialState(args.task, {
       maxIterations: args.maxIterations,
       maxPhaseRetries: args.maxPhaseRetries,
       model: args.model,
       initialPhase: phases.getFirstPhase(),
     });
+  } else if (state.hasCloudForgeDir(args.workingDir)) {
+    // Auto-resume: no task, no --continue-session, but .cloudforge/ exists
+    wfState = state.tryLoadState(args.workingDir);
+    if (wfState) {
+      state.repairState(wfState, allPhaseNames);
+      args.task = wfState.task;
+      tui.warnMessage(`Auto-resuming from state: phase ${wfState.phase}, iteration ${wfState.iteration}`);
+    } else {
+      // Worst case: state.json missing/corrupt, recover from artifacts
+      tui.warnMessage('state.json missing or corrupt — recovering from artifacts...');
+      wfState = state.recoverStateFromArtifacts(args.workingDir, allPhaseNames, {
+        maxIterations: args.maxIterations,
+        maxPhaseRetries: args.maxPhaseRetries,
+        model: args.model,
+      });
+      if (!wfState) {
+        tui.errorMessage('Could not infer task from .cloudforge/ artifacts. Provide a task description.');
+        printUsage();
+        return 1;
+      }
+      args.task = wfState.task;
+      tui.warnMessage(`Recovered task: "${args.task}" — resuming from phase: ${wfState.phase}`);
+    }
+  } else {
+    // No task, no .cloudforge/ — nothing to do
+    tui.errorMessage('No task provided and no .cloudforge/ directory found.');
+    printUsage();
+    return 1;
   }
 
   // Display banner
   tui.banner(args.task, args.model || 'default', args.maxIterations);
-
-  // Get ordered phase list for progress visualization
-  const allPhaseNames = phases.getOrderedPhaseNames();
 
   // Graceful shutdown
   let activeProcess = null;

@@ -164,7 +164,7 @@ describe('tui', () => {
       tui.haltMessage('stuck in loop');
       assert.ok(capture.output.includes('HALTED'));
       assert.ok(capture.output.includes('stuck in loop'));
-      assert.ok(capture.output.includes('--continue-session'));
+      assert.ok(capture.output.includes('re-run without arguments to auto-resume'));
     });
 
     it('dryRunSummary lists phases', () => {

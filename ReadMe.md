@@ -85,6 +85,9 @@ Session continuity is maintained via `--resume <session-id>` so the agent retain
 # Direct invocation
 node forge.js "Your task description here"
 
+# Auto-resume (picks up where it left off from .cloudforge/)
+node forge.js
+
 # Via batch launcher (sets up environment)
 cloudforge "Your task description here"
 
@@ -94,7 +97,7 @@ node forge.js "Add JWT auth" --max-iterations 50 --model opus --working-dir ./my
 # Dry run (show plan without executing)
 node forge.js "Add JWT auth" --dry-run
 
-# Resume a previous session
+# Resume a previous session (legacy, prefer auto-resume)
 node forge.js --continue-session <session-id>
 ```
 
@@ -102,13 +105,13 @@ node forge.js --continue-session <session-id>
 
 | Argument              | Default       | Description                                              |
 | --------------------- | ------------- | -------------------------------------------------------- |
-| `<task>` (positional) | required      | High-level task description                              |
+| `[task]` (positional) | optional      | Task description (auto-resumes from .cloudforge/ if omitted) |
 | `--max-iterations`    | `25`          | Max total agent invocations (controls innovation rounds) |
 | `--max-phase-retries` | `3`           | Max retries per phase before moving on                   |
 | `--model`             | auto          | Model (sonnet/opus/haiku)                                |
 | `--working-dir`       | `cwd`         | Project directory                                        |
 | `--max-turns`         | `50`          | Max agentic turns per invocation                         |
-| `--continue-session`  | `null`        | Resume previous session by ID                            |
+| `--continue-session`  | `null`        | Resume previous session by ID (legacy)                   |
 | `--dry-run`           | `false`       | Show planned phase sequence without executing            |
 | `--rate-limit-wait`   | `43200` (12h) | Max seconds to wait on rate limit                        |
 | `-v, --verbose`       | `false`       | Show debug output (spawn cmd, stderr, events)            |
@@ -157,7 +160,7 @@ Forge/
     runner.test.js      # Runner unit tests (27 tests)
     ratelimit.test.js   # Rate limit handler tests (33 tests)
     phases.test.js      # Phase engine tests (89 tests)
-    state.test.js       # State manager tests (34 tests)
+    state.test.js       # State manager tests (79 tests)
   ReadMe.md
 ```
 
@@ -203,6 +206,8 @@ Forge/
 - [x] Reachability enforcement - features must be wired into the application, not just tested in isolation (IMPLEMENT, VERIFY, INTEGRATE, GATE_QUALITY, REVIEW)
 - [x] Real-time streaming output with ANSI colors and timestamps
 - [x] State persistence and resume support (`.cloudforge/state.json`)
+- [x] Auto-resume from `.cloudforge/` when no arguments given
+- [x] Artifact-based state recovery (corrupt/missing `state.json` fallback)
 - [x] Circuit breaker (stuck detection)
 - [x] Dry-run mode
 - [x] Graceful Ctrl+C shutdown with state save
