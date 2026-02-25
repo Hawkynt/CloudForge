@@ -446,6 +446,19 @@ CLOUDFORGE_STATUS:
     });
   });
 
+  describe('getOrderedPhaseNames', () => {
+    it('returns all phase names in workflow order', () => {
+      const names = phases.getOrderedPhaseNames();
+      assert.ok(Array.isArray(names));
+      assert.ok(names.length >= 18, `expected at least 18 phases, got ${names.length}`);
+      assert.equal(names[0], 'DISCOVER');
+      assert.ok(names.includes('INNOVATE'));
+      assert.ok(names.indexOf('DISCOVER') < names.indexOf('REQUIREMENTS'));
+      assert.ok(names.indexOf('REQUIREMENTS') < names.indexOf('PRIORITIZE'));
+      assert.ok(names.indexOf('TEST') < names.indexOf('IMPLEMENT'));
+    });
+  });
+
   describe('workflow.dot parsing', () => {
     it('parseWorkflowFile extracts phases from DOT content', () => {
       const dot = `

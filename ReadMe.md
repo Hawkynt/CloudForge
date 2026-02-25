@@ -198,6 +198,9 @@ Forge/
 - [x] Rate limit detection with +30s safety buffer
 - [x] Absolute reset time parsing ("resets 1am" format)
 - [x] Countdown timer with auto-retry and exponential backoff
+- [x] Phase progress bar visualization (workflow position indicator per phase)
+- [x] Evidence-based verification - VERIFY/GATE_QUALITY/REVIEW/INNOVATE require concrete proof (test output, code inspection)
+- [x] Reachability enforcement - features must be wired into the application, not just tested in isolation (IMPLEMENT, VERIFY, INTEGRATE, GATE_QUALITY, REVIEW)
 - [x] Real-time streaming output with ANSI colors and timestamps
 - [x] State persistence and resume support (`.cloudforge/state.json`)
 - [x] Circuit breaker (stuck detection)

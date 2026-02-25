@@ -143,6 +143,9 @@ async function main() {
   // Display banner
   tui.banner(args.task, args.model || 'default', args.maxIterations);
 
+  // Get ordered phase list for progress visualization
+  const allPhaseNames = phases.getOrderedPhaseNames();
+
   // Graceful shutdown
   let activeProcess = null;
   let shuttingDown = false;
@@ -195,7 +198,7 @@ async function main() {
       context.subTaskNumber = wfState.currentSubTask;
     }
 
-    // Display phase banner
+    // Display phase banner + progress
     tui.phaseBanner(
       currentPhase,
       phases.isTaskLoopPhase(currentPhase) ? wfState.currentSubTask : null,
@@ -204,6 +207,7 @@ async function main() {
       wfState.maxIterations,
       wfState.totalTokens,
     );
+    tui.phaseProgressLine(allPhaseNames, wfState.completedPhases, currentPhase);
 
     // Generate prompt
     const prompt = phases.getPromptForPhase(currentPhase, args.task, context);
@@ -318,7 +322,7 @@ async function main() {
     });
 
     // Show completed phases
-    tui.completedPhases(wfState.completedPhases);
+    tui.completedPhasesList(wfState.completedPhases);
 
     // Transition
     if (!nextPhase) {

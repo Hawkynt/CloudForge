@@ -189,16 +189,64 @@ describe('tui', () => {
       assert.ok(capture.output.includes('5/25'));
     });
 
-    it('completedPhases renders chain of completed phases', () => {
-      tui.completedPhases(['ANALYZE', 'DESIGN']);
+    it('completedPhasesList renders chain of completed phases', () => {
+      tui.completedPhasesList(['ANALYZE', 'DESIGN']);
       assert.ok(capture.output.includes('Completed'));
       assert.ok(capture.output.includes('ANALYZE'));
       assert.ok(capture.output.includes('DESIGN'));
     });
 
-    it('completedPhases does nothing for empty array', () => {
-      tui.completedPhases([]);
+    it('completedPhasesList does nothing for empty array', () => {
+      tui.completedPhasesList([]);
       assert.equal(capture.output, '');
+    });
+
+    it('phaseProgressLine shows markers for completed, current, and pending phases', () => {
+      const all = ['DISCOVER', 'REQUIREMENTS', 'DESIGN', 'PLAN', 'IMPLEMENT', 'REVIEW'];
+      tui.phaseProgressLine(all, ['DISCOVER', 'REQUIREMENTS'], 'DESIGN');
+      assert.ok(capture.output.includes('#'));
+      assert.ok(capture.output.includes('>'));
+      assert.ok(capture.output.includes('-'));
+      assert.ok(capture.output.includes('3/6'));
+    });
+
+    it('phaseProgressLine handles first phase with no completed', () => {
+      const all = ['DISCOVER', 'REQUIREMENTS', 'DESIGN'];
+      tui.phaseProgressLine(all, [], 'DISCOVER');
+      assert.ok(capture.output.includes('>'));
+      assert.ok(capture.output.includes('1/3'));
+    });
+
+    it('phaseProgressLine handles last phase all completed', () => {
+      const all = ['DISCOVER', 'REQUIREMENTS', 'DESIGN'];
+      tui.phaseProgressLine(all, ['DISCOVER', 'REQUIREMENTS'], 'DESIGN');
+      assert.ok(capture.output.includes('3/3'));
+    });
+
+    it('toolCallLine inserts newline when streamText did not end with one', () => {
+      tui.streamText('some text without newline');
+      tui.toolCallLine('Bash', 'npm test');
+      assert.ok(capture.output.startsWith('some text without newline\n'), 'should insert newline before tool call');
+      assert.ok(capture.output.includes('Bash'));
+      assert.ok(capture.output.includes('npm test'));
+    });
+
+    it('toolCallLine does not double-newline when streamText ended with one', () => {
+      tui.streamText('some text\n');
+      tui.toolCallLine('Bash', 'npm test');
+      assert.ok(!capture.output.includes('some text\n\n  '), 'should not double-newline');
+      assert.ok(capture.output.includes('Bash'));
+    });
+
+    it('ensureNewline is a no-op at start of output', () => {
+      tui.ensureNewline();
+      assert.equal(capture.output, '');
+    });
+
+    it('ensureNewline emits newline after partial streamText', () => {
+      tui.streamText('partial');
+      tui.ensureNewline();
+      assert.equal(capture.output, 'partial\n');
     });
   });
 });
