@@ -4,21 +4,40 @@ CURRENT PHASE: VERIFY (ISTQB Verification)
 TASK: {task}
 SUB-TASK: {subTaskNumber} of {totalSubTasks}
 
-Run the full test suite and perform ISTQB-level verification:
+Run the full test suite and perform ISTQB-level verification.
+
+**CRITICAL: You must provide concrete evidence for every claim. Do not assert that tests pass or features work without showing proof.**
 
 1. **Run all tests**: Execute the project's complete test suite (not just this sub-task's tests).
+   - **Show the actual test command you ran and its full output.** Do not summarize. The orchestrator needs to see pass/fail counts.
+   - If you cannot run the tests (no test runner, missing deps), report NEEDS_RETRY immediately.
+
 2. **Analyze failures**: If any tests fail:
    - Classify severity: critical (blocks progress) vs. minor (cosmetic).
    - Identify root cause: is it a bug in new code, a regression, or a flawed test?
    - Report what needs to be fixed.
+
 3. **Coverage check**: Assess test coverage of the new code.
    - Are all code paths exercised?
    - Are edge cases covered?
-4. **Linting & build**: Check for build errors, linting violations, or warnings.
-5. **BDD traceability**: Verify that the BDD scenarios relevant to this sub-task are covered by passing tests.
-6. **Story acceptance**: For each story linked to this sub-task (from `.cloudforge/plan.md`), check whether all acceptance criteria are now met. If so, update `.cloudforge/stories.md` to set the story status to `done`.
 
-Set result to DONE if all tests pass and quality is acceptable.
-Set result to NEEDS_RETRY if any tests fail or quality issues are found.
+4. **Linting & build**: Check for build errors, linting violations, or warnings.
+
+5. **BDD traceability**: Verify that the BDD scenarios relevant to this sub-task are covered by passing tests.
+
+6. **Reachability check**: For each new function, class, or module created in this sub-task:
+   - **Trace the call chain** from the application's entry point(s) to the new code. Is there an unbroken import/call path from main/index/app to this feature?
+   - If the code is only imported by test files, it is **dead code** — the feature is NOT implemented. Report NEEDS_RETRY and explain what wiring is missing (e.g., "function X is defined but never called from any route/handler/main module").
+   - Check exports: is the new code exported from its module AND imported by a consuming module in the application?
+
+7. **Story acceptance - with evidence**: For each story linked to this sub-task (from `.cloudforge/plan.md`):
+   - **Read the actual implementation files** and confirm the code exists and matches the acceptance criteria. Do not rely on memory or assumptions from prior phases.
+   - **Confirm reachability** (step 6 above) — code that exists but is never called does not satisfy acceptance criteria.
+   - **Run a targeted test or exercise the feature** to prove it works, not just that tests pass generically.
+   - Only if you have concrete evidence (file contents, test output, reachability) that ALL acceptance criteria are met, update `.cloudforge/stories.md` to set the story status to `done`.
+   - If any criterion cannot be verified with evidence, leave the story as `in progress`.
+
+Set result to DONE only if all tests pass AND you have shown the evidence.
+Set result to NEEDS_RETRY if any tests fail, quality issues are found, or you cannot verify stories with evidence.
 
 {status_tag}

@@ -5,13 +5,17 @@ TASK: {task}
 
 Assess what was built and decide whether another innovation round is warranted.
 
+**CRITICAL: Do not trust status markers from prior phases. Independently verify that features actually exist before declaring the task complete.**
+
 1. **Retrospective**: What went well? What was difficult? What could be improved in the process?
 
-2. **Story tracking review**: Read `.cloudforge/stories.md` and tally:
-   - How many Must-have stories are `done` vs. `pending` / `in progress`?
-   - How many Should-have stories are `done` vs. remaining?
-   - How many Could-have stories are worth pursuing?
-   If any Must-have stories are NOT `done`, NEEDS_RETRY is mandatory.
+2. **Story verification** (not just status review): Read `.cloudforge/stories.md` and for each Must-have story marked `done`:
+   - **Read the actual implementation file(s)** to confirm the feature code exists.
+   - **Run the test suite** to confirm tests still pass.
+   - If a story is marked `done` but the implementation is missing, incomplete, or broken: change its status back to `pending`. NEEDS_RETRY is mandatory.
+   - Tally: How many Must-have stories are genuinely `done` vs. `pending` / `in progress`?
+   - Tally Should-have and Could-have stories similarly.
+   If any Must-have stories are NOT genuinely `done`, NEEDS_RETRY is mandatory.
 
 3. **Completeness check**: Review the MoSCoW classification from `.cloudforge/requirements.md`:
    - Are all Must-have items delivered? (If not, NEEDS_RETRY is mandatory.)

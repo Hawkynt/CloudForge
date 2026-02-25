@@ -5,25 +5,35 @@ TASK: {task}
 
 This is the final quality gate before review. Evaluate against the KPIs defined in the PRIORITIZE phase.
 
+**CRITICAL: Every KPI evaluation must include concrete evidence. Do not claim PASS without proof. "I believe the tests pass" is not evidence — show the test output.**
+
 **Evaluate each KPI from `.cloudforge/kpis.md`:**
 
-1. **All tests passing**: Run the full test suite. Zero failures required.
-2. **Test coverage**: Check coverage meets the defined threshold. Report actual vs. target.
-3. **Acceptance criteria**: Verify every Must-have user story's acceptance criteria is met.
-4. **BDD scenarios**: Confirm all BDD scenarios from `.cloudforge/bdd-scenarios.md` are covered by tests.
+1. **All tests passing**: Run the full test suite. **Show the actual command and its complete output.** Zero failures required. If you cannot produce test output, this KPI is FAIL.
+2. **Test coverage**: Check coverage meets the defined threshold. **Show coverage report output.** Report actual vs. target.
+3. **Acceptance criteria**: For every Must-have user story:
+   - **Read the implementation files** to confirm the feature code exists.
+   - **Cross-check each acceptance criterion** against the actual code and test results.
+   - Do not trust `.cloudforge/stories.md` status alone — verify independently.
+4. **BDD scenarios**: Confirm all BDD scenarios from `.cloudforge/bdd-scenarios.md` are covered by tests. **List each scenario and its corresponding test.**
 5. **Code quality**: No linting errors, no obvious code smells, reasonable complexity.
-6. **No regressions**: Existing functionality preserved.
-7. **Type safety**: Check for primitive obsession - domain concepts should use semantic types, not bare strings/numbers. Function signatures should make argument-swapping a compile error. Enums should replace magic strings/codes.
-8. **Documentation**: Code is self-documenting or has necessary comments.
-9. **Task-specific KPIs**: Evaluate any custom metrics defined for this task.
+6. **No regressions**: Existing functionality preserved. **Show full test suite output** as proof.
+7. **Reachability**: For every Must-have feature, trace the call chain from the application's entry point(s) to the feature code.
+   - If the feature is only reachable from tests (dead code), this KPI is **FAIL**.
+   - List the call path: entry point → … → feature function/class.
+8. **Type safety**: Check for primitive obsession - domain concepts should use semantic types, not bare strings/numbers. Function signatures should make argument-swapping a compile error. Enums should replace magic strings/codes.
+9. **Documentation**: Code is self-documenting or has necessary comments.
+10. **Task-specific KPIs**: Evaluate any custom metrics defined for this task.
 
 **Scoring:**
-- Report each KPI as PASS or FAIL with evidence.
+- Report each KPI as PASS or FAIL.
+- For each PASS: include the evidence (test output, code excerpt, coverage number).
+- For each FAIL: explain exactly what is missing and what needs to be fixed.
 - Calculate overall pass rate.
 
 **Decision:**
-- If ALL mandatory KPIs pass: result = DONE.
-- If ANY mandatory KPI fails: result = NEEDS_RETRY. List exactly what needs to be fixed.
+- If ALL mandatory KPIs pass with evidence: result = DONE.
+- If ANY mandatory KPI fails or lacks evidence: result = NEEDS_RETRY. List exactly what needs to be fixed.
 
 Write the KPI evaluation results to `.cloudforge/quality-report.md`.
 

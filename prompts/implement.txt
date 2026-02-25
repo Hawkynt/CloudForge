@@ -20,9 +20,13 @@ Write the minimal code to make the failing tests pass:
    - Use enums for fixed value sets, not magic strings or numeric constants.
    - Validate at construction (factory/constructor), then trust the type everywhere else.
    - Prefer immutable types for value objects.
-4. **Run tests**: Verify all tests for this sub-task pass.
-5. **Do NOT modify tests** - only write implementation code.
-6. **Do NOT implement beyond** what the tests require.
-7. **Update story tracking**: In `.cloudforge/stories.md`, set the status to `in progress` for any stories linked to this sub-task.
+4. **Wire it in**: Writing the code is not enough — it must be reachable from the application.
+   - Ensure new modules/functions are imported and called from the appropriate place in the existing codebase (routes, main entry point, event handlers, UI components, etc.).
+   - If you created a new file, confirm something in the existing application actually imports/requires it.
+   - Code that is only reachable from tests is dead code, not a feature.
+5. **Run tests**: Verify all tests for this sub-task pass.
+6. **Do NOT modify tests** - only write implementation code.
+7. **Do NOT implement beyond** what the tests require.
+8. **Update story tracking**: In `.cloudforge/stories.md`, set the status to `in progress` for any stories linked to this sub-task.
 
 {status_tag}

@@ -5,6 +5,8 @@ TASK: {task}
 
 All sub-tasks are implemented. Now verify the system works as a whole.
 
+**CRITICAL: Show actual test/build command output for every verification step. Do not assert "all tests pass" without showing the evidence.**
+
 Apply ISTQB test levels beyond unit testing:
 
 1. **Integration testing**: Verify that components work together correctly.
@@ -18,13 +20,19 @@ Apply ISTQB test levels beyond unit testing:
    - Verify non-functional requirements (performance, error handling).
 
 3. **Regression testing**: Ensure existing functionality is not broken.
-   - Run the full test suite.
+   - **Run the full test suite and show the complete output.** Do not summarize.
    - Check for any side effects of the new code on existing features.
 
-4. **Build verification**: Ensure the project builds cleanly with no warnings or errors.
+4. **Build verification**: Ensure the project builds cleanly with no warnings or errors. **Show the build command output.**
 
 5. If any tests fail or integration issues are found, fix them directly.
 
-Report DONE if everything passes. Report NEEDS_RETRY if there are unfixable issues requiring rework.
+6. **Reachability audit**: For each Must-have story from `.cloudforge/stories.md`:
+   - **Read the implementation file(s)** and confirm the feature code is present.
+   - **Trace the call chain** from the application's entry point(s) (main, index, app, routes, CLI) to the feature code. There must be an unbroken import/call path.
+   - If the feature code is only reachable from test files, it is **dead code** — the feature is NOT integrated. Report NEEDS_RETRY and list exactly what wiring is missing.
+   - List each story, where its implementation lives, and how it is reached from the application.
+
+Report DONE if everything passes with evidence. Report NEEDS_RETRY if there are unfixable issues requiring rework.
 
 {status_tag}
