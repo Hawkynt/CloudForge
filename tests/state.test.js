@@ -613,5 +613,14 @@ describe('state', () => {
       assert.ok(s.startedAt >= before);
       assert.ok(s.lastActivity >= before);
     });
+
+    it('clears circuit breaker state on repair (resume)', () => {
+      const s = st.createInitialState('test');
+      s.consecutiveRetries = 5;
+      s.lastErrors = ['err1', 'err2', 'err3', 'err4', 'err5'];
+      st.repairState(s, orderedPhases);
+      assert.equal(s.consecutiveRetries, 0);
+      assert.deepEqual(s.lastErrors, []);
+    });
   });
 });

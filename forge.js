@@ -390,9 +390,12 @@ async function main() {
       break;
     }
 
-    // If transitioning to a new phase (not retry), reset retry count
-    if (nextPhase !== currentPhase)
+    // If transitioning to a new phase (not retry), reset retry + circuit breaker state
+    if (nextPhase !== currentPhase) {
       phaseRetryCount = 0;
+      wfState.consecutiveRetries = 0;
+      wfState.lastErrors = [];
+    }
 
     currentPhase = nextPhase;
     wfState.phase = currentPhase;
