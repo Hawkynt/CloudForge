@@ -106,7 +106,7 @@ Arguments:
   [task]                  Task description (auto-resumes from .cloudforge/ if omitted)
 
 Options:
-  --max-iterations <n>    Max agent invocations (default: 25)
+  --max-iterations <n>    Max agent invocations (default: 100)
   --max-phase-retries <n> Max retries per phase (default: 3)
   --model <name>          Model to use: sonnet|opus|haiku
   --working-dir <path>    Project directory (default: cwd)
@@ -145,10 +145,10 @@ async function main() {
       tui.errorMessage(`No saved state found in ${args.workingDir}/.cloudforge/state.json`);
       return 1;
     }
-    state.repairState(wfState, allPhaseNames);
+    state.repairState(wfState, allPhaseNames, { additionalIterations: args.maxIterations });
     if (!args.task)
       args.task = wfState.task;
-    tui.warnMessage(`Resuming session from phase: ${wfState.phase}, iteration: ${wfState.iteration}`);
+    tui.warnMessage(`Resuming session from phase: ${wfState.phase}, iteration: ${wfState.iteration} (budget: ${wfState.maxIterations})`);
   } else if (args.task) {
     // Fresh start with explicit task
     wfState = state.createInitialState(args.task, {
@@ -161,9 +161,9 @@ async function main() {
     // Auto-resume: no task, no --continue-session, but .cloudforge/ exists
     wfState = state.tryLoadState(args.workingDir);
     if (wfState) {
-      state.repairState(wfState, allPhaseNames);
+      state.repairState(wfState, allPhaseNames, { additionalIterations: args.maxIterations });
       args.task = wfState.task;
-      tui.warnMessage(`Auto-resuming from state: phase ${wfState.phase}, iteration ${wfState.iteration}`);
+      tui.warnMessage(`Auto-resuming from state: phase ${wfState.phase}, iteration ${wfState.iteration} (budget: ${wfState.maxIterations})`);
     } else {
       // Worst case: state.json missing/corrupt, recover from artifacts
       tui.warnMessage('state.json missing or corrupt — recovering from artifacts...');
@@ -187,8 +187,12 @@ async function main() {
     return 1;
   }
 
+  // Track session start for TUI display (runtime-only, not persisted)
+  const sessionStartIteration = wfState.iteration;
+  wfState.sessionStartIteration = sessionStartIteration;
+
   // Display banner
-  tui.banner(args.task, args.model || 'default', args.maxIterations);
+  tui.banner(args.task, args.model || 'default', wfState.maxIterations);
 
   // Graceful shutdown
   let activeProcess = null;
@@ -250,6 +254,7 @@ async function main() {
       wfState.iteration + 1,
       wfState.maxIterations,
       wfState.totalTokens,
+      sessionStartIteration,
     );
     tui.phaseProgressLine(allPhaseNames, wfState.completedPhases, currentPhase);
 
@@ -301,7 +306,8 @@ async function main() {
           tui.haltMessage('Rate limit wait exceeded. State saved.');
           return 1;
         }
-        ++rateLimitAttempt;
+        if (!rl.retryAfter)
+          ++rateLimitAttempt;
         continue;
       }
 

@@ -106,7 +106,7 @@ node forge.js --continue-session <session-id>
 | Argument              | Default       | Description                                              |
 | --------------------- | ------------- | -------------------------------------------------------- |
 | `[task]` (positional) | optional      | Task description (auto-resumes from .cloudforge/ if omitted) |
-| `--max-iterations`    | `25`          | Max total agent invocations (controls innovation rounds) |
+| `--max-iterations`    | `100`         | Per-session iteration budget (extends on resume)         |
 | `--max-phase-retries` | `3`           | Max retries per phase before moving on                   |
 | `--model`             | auto          | Model (sonnet/opus/haiku)                                |
 | `--working-dir`       | `cwd`         | Project directory                                        |
@@ -157,11 +157,11 @@ Forge/
     innovate.txt        # Innovation round assessment
     status_tag.txt      # Shared CLOUDFORGE_STATUS block template
   tests/
-    tui.test.js         # TUI unit tests (30 tests)
+    tui.test.js         # TUI unit tests (32 tests)
     runner.test.js      # Runner unit tests (27 tests)
-    ratelimit.test.js   # Rate limit handler tests (33 tests)
+    ratelimit.test.js   # Rate limit handler tests (41 tests)
     phases.test.js      # Phase engine tests (89 tests)
-    state.test.js       # State manager tests (79 tests)
+    state.test.js       # State manager tests (86 tests)
     transient.test.js   # Transient error detection tests (12 tests)
     forge-status.test.js # Status synthesis tests (4 tests)
   ReadMe.md
@@ -202,7 +202,8 @@ Forge/
 - [x] Agent subprocess management with stream-json parsing
 - [x] Session continuity via `--resume`
 - [x] Rate limit detection with +30s safety buffer
-- [x] Absolute reset time parsing ("resets 1am" format)
+- [x] Absolute reset time parsing ("resets 1am", "resets Mar 9, 11am (Europe/Berlin)" with timezone support)
+- [x] Smart attempt counting (known reset times don't burn retry attempts)
 - [x] Countdown timer with auto-retry and exponential backoff
 - [x] Phase progress bar visualization (workflow position indicator per phase)
 - [x] Evidence-based verification - VERIFY/GATE_QUALITY/REVIEW/INNOVATE require concrete proof (test output, code inspection)
@@ -210,6 +211,7 @@ Forge/
 - [x] Real-time streaming output with ANSI colors and timestamps
 - [x] State persistence and resume support (`.cloudforge/state.json`)
 - [x] Auto-resume from `.cloudforge/` when no arguments given
+- [x] Per-session iteration budget extension on resume (iteration is cumulative, budget resets)
 - [x] Artifact-based state recovery (corrupt/missing `state.json` fallback)
 - [x] Circuit breaker (stuck detection)
 - [x] Dry-run mode

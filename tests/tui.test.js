@@ -136,6 +136,12 @@ describe('tui', () => {
       assert.ok(capture.output.includes('3/25'));
     });
 
+    it('phaseBanner with sessionStart shows session iteration and total', () => {
+      tui.phaseBanner('VERIFY', null, null, 52, 150, { input: 0, output: 0 }, 50);
+      assert.ok(capture.output.includes('2/100'));
+      assert.ok(capture.output.includes('(total: 52)'));
+    });
+
     it('toolCallLine shows tool name and args', () => {
       tui.toolCallLine('bash', 'npm test');
       assert.ok(capture.output.includes('bash'));
@@ -187,6 +193,21 @@ describe('tui', () => {
       assert.ok(capture.output.includes('CLOUDFORGE COMPLETE'));
       assert.ok(capture.output.includes('test task'));
       assert.ok(capture.output.includes('5/25'));
+      assert.ok(capture.output.includes('(session: 5)'));
+    });
+
+    it('finalSummary shows session count for resumed run', () => {
+      const mockState = {
+        task: 'resumed task',
+        iteration: 55,
+        maxIterations: 150,
+        sessionStartIteration: 50,
+        totalTokens: { input: 10000, output: 5000 },
+        startedAt: new Date(Date.now() - 30000).toISOString(),
+      };
+      tui.finalSummary(mockState);
+      assert.ok(capture.output.includes('55/150'));
+      assert.ok(capture.output.includes('(session: 5)'));
     });
 
     it('completedPhasesList renders chain of completed phases', () => {

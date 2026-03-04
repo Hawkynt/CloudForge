@@ -622,5 +622,56 @@ describe('state', () => {
       assert.equal(s.consecutiveRetries, 0);
       assert.deepEqual(s.lastErrors, []);
     });
+
+    it('extends budget when additionalIterations provided', () => {
+      const s = st.createInitialState('test', { maxIterations: 50 });
+      s.iteration = 50;
+      st.repairState(s, orderedPhases, { additionalIterations: 100 });
+      assert.equal(s.maxIterations, 150);
+    });
+
+    it('extends budget from current iteration position', () => {
+      const s = st.createInitialState('test', { maxIterations: 50 });
+      s.iteration = 30;
+      st.repairState(s, orderedPhases, { additionalIterations: 50 });
+      assert.equal(s.maxIterations, 80);
+    });
+
+    it('does not change maxIterations when no options passed', () => {
+      const s = st.createInitialState('test', { maxIterations: 50 });
+      s.iteration = 50;
+      st.repairState(s, orderedPhases);
+      assert.equal(s.maxIterations, 50);
+    });
+
+    it('ignores zero additionalIterations', () => {
+      const s = st.createInitialState('test', { maxIterations: 50 });
+      s.iteration = 50;
+      st.repairState(s, orderedPhases, { additionalIterations: 0 });
+      assert.equal(s.maxIterations, 50);
+    });
+
+    it('ignores negative additionalIterations', () => {
+      const s = st.createInitialState('test', { maxIterations: 50 });
+      s.iteration = 50;
+      st.repairState(s, orderedPhases, { additionalIterations: -10 });
+      assert.equal(s.maxIterations, 50);
+    });
+
+    it('extends correctly after invalid iteration repaired', () => {
+      const s = st.createInitialState('test');
+      s.iteration = -5;
+      st.repairState(s, orderedPhases, { additionalIterations: 100 });
+      assert.equal(s.iteration, 0);
+      assert.equal(s.maxIterations, 100);
+    });
+
+    it('extends correctly after invalid maxIterations repaired', () => {
+      const s = st.createInitialState('test');
+      s.maxIterations = -1;
+      s.iteration = 10;
+      st.repairState(s, orderedPhases, { additionalIterations: 100 });
+      assert.equal(s.maxIterations, 110);
+    });
   });
 });

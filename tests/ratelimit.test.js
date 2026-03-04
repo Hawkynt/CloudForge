@@ -181,4 +181,78 @@ describe('ratelimit', () => {
       assert.ok(result.retryAfter > 0, `expected retryAfter > 0, got ${result.retryAfter}`);
     });
   });
+
+  describe('date+timezone absolute reset time parsing', () => {
+    it('regex matches "resets Mar 9, 11am"', () => {
+      const match = rl.ABSOLUTE_TIME_REGEX.exec('resets Mar 9, 11am');
+      assert.ok(match);
+      assert.equal(match[1], 'Mar');
+      assert.equal(match[2], '9');
+      assert.equal(match[3], '11');
+      assert.equal(match[4], undefined);
+      assert.equal(match[5], 'am');
+      assert.equal(match[6], undefined);
+    });
+
+    it('regex matches "resets Mar 9, 11am (Europe/Berlin)"', () => {
+      const match = rl.ABSOLUTE_TIME_REGEX.exec('resets Mar 9, 11am (Europe/Berlin)');
+      assert.ok(match);
+      assert.equal(match[1], 'Mar');
+      assert.equal(match[2], '9');
+      assert.equal(match[3], '11');
+      assert.equal(match[5], 'am');
+      assert.equal(match[6], 'Europe/Berlin');
+    });
+
+    it('regex matches "resets March 9, 11:30 AM (US/Eastern)"', () => {
+      const match = rl.ABSOLUTE_TIME_REGEX.exec('resets March 9, 11:30 AM (US/Eastern)');
+      assert.ok(match);
+      assert.equal(match[1], 'March');
+      assert.equal(match[2], '9');
+      assert.equal(match[3], '11');
+      assert.equal(match[4], '30');
+      assert.equal(match[5], 'AM');
+      assert.equal(match[6], 'US/Eastern');
+    });
+
+    it('regex still matches time-only "resets 1am" (backward compat)', () => {
+      const match = rl.ABSOLUTE_TIME_REGEX.exec('resets 1am');
+      assert.ok(match);
+      assert.equal(match[1], undefined);
+      assert.equal(match[2], undefined);
+      assert.equal(match[3], '1');
+      assert.equal(match[5], 'am');
+    });
+
+    it('parseAbsoluteResetTime with month+day returns positive seconds', () => {
+      const match = rl.ABSOLUTE_TIME_REGEX.exec('resets Mar 9, 11am');
+      assert.ok(match);
+      const seconds = rl.parseAbsoluteResetTime(match);
+      assert.ok(seconds > 0, `expected positive seconds, got ${seconds}`);
+    });
+
+    it('parseAbsoluteResetTime with timezone returns positive seconds', () => {
+      const match = rl.ABSOLUTE_TIME_REGEX.exec('resets Mar 9, 11am (Europe/Berlin)');
+      assert.ok(match);
+      const seconds = rl.parseAbsoluteResetTime(match);
+      assert.ok(seconds > 0, `expected positive seconds, got ${seconds}`);
+    });
+
+    it('invalid timezone falls back gracefully (positive seconds, no throw)', () => {
+      const match = rl.ABSOLUTE_TIME_REGEX.exec('resets Mar 9, 11am (Fake/Nowhere)');
+      assert.ok(match);
+      const seconds = rl.parseAbsoluteResetTime(match);
+      assert.ok(seconds > 0, `expected positive seconds, got ${seconds}`);
+    });
+
+    it('end-to-end: detectRateLimit with full date+timezone message', () => {
+      const result = rl.detectRateLimit(
+        1,
+        "You've hit your limit \u00b7 resets Mar 9, 11am (Europe/Berlin)",
+        '',
+      );
+      assert.equal(result.isRateLimit, true);
+      assert.ok(result.retryAfter > 0, `expected retryAfter > 0, got ${result.retryAfter}`);
+    });
+  });
 });
