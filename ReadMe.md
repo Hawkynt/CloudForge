@@ -157,7 +157,7 @@ Forge/
     innovate.txt        # Innovation round assessment
     status_tag.txt      # Shared CLOUDFORGE_STATUS block template
   tests/
-    tui.test.js         # TUI unit tests (32 tests)
+    tui.test.js         # TUI unit tests (91 tests)
     runner.test.js      # Runner unit tests (27 tests)
     ratelimit.test.js   # Rate limit handler tests (41 tests)
     phases.test.js      # Phase engine tests (89 tests)
@@ -205,7 +205,8 @@ Forge/
 - [x] Absolute reset time parsing ("resets 1am", "resets Mar 9, 11am (Europe/Berlin)" with timezone support)
 - [x] Smart attempt counting (known reset times don't burn retry attempts)
 - [x] Countdown timer with auto-retry and exponential backoff
-- [x] Phase progress bar visualization (workflow position indicator per phase)
+- [x] Rich TUI with box-drawing, KPI dashboard, and phase result boxes
+- [x] Phase progress bar visualization (grouped by Discovery/Design/Task Loop/Integration)
 - [x] Evidence-based verification - VERIFY/GATE_QUALITY/REVIEW/INNOVATE require concrete proof (test output, code inspection)
 - [x] Reachability enforcement - features must be wired into the application, not just tested in isolation (IMPLEMENT, VERIFY, INTEGRATE, GATE_QUALITY, REVIEW)
 - [x] Real-time streaming output with ANSI colors and timestamps

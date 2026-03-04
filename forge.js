@@ -192,7 +192,10 @@ async function main() {
   wfState.sessionStartIteration = sessionStartIteration;
 
   // Display banner
-  tui.banner(args.task, args.model || 'default', wfState.maxIterations);
+  tui.banner(args.task, args.model || 'default', wfState.maxIterations, {
+    isResume: sessionStartIteration > 0,
+    iteration: wfState.iteration,
+  });
 
   // Graceful shutdown
   let activeProcess = null;
@@ -385,6 +388,10 @@ async function main() {
       retryCount: phaseRetryCount,
       maxRetries: args.maxPhaseRetries,
     });
+
+    // Show phase result and KPI dashboard
+    tui.phaseResultBox(currentPhase, status?.result, status?.summary, result.tokensUsed, nextPhase);
+    tui.kpiDashboard(wfState, status, allPhaseNames);
 
     // Show completed phases
     tui.completedPhasesList(wfState.completedPhases);
