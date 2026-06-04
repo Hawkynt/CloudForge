@@ -1,5 +1,17 @@
 # CloudForge - Autonomous AI Coding Orchestrator
 
+[![License](https://img.shields.io/github/license/Hawkynt/CloudForge)](https://github.com/Hawkynt/CloudForge/blob/main/LICENSE)
+[![Language](https://img.shields.io/github/languages/top/Hawkynt/CloudForge?color=8957D5)](https://github.com/Hawkynt/CloudForge)
+
+![Last Commit](https://img.shields.io/github/last-commit/Hawkynt/CloudForge?branch=main)
+![Activity](https://img.shields.io/github/commit-activity/m/Hawkynt/CloudForge)
+
+[![Stars](https://img.shields.io/github/stars/Hawkynt/CloudForge?color=FFD700)](https://github.com/Hawkynt/CloudForge/stargazers)
+[![Forks](https://img.shields.io/github/forks/Hawkynt/CloudForge?color=008080)](https://github.com/Hawkynt/CloudForge/network/members)
+[![Issues](https://img.shields.io/github/issues/Hawkynt/CloudForge)](https://github.com/Hawkynt/CloudForge/issues)
+![Code Size](https://img.shields.io/github/languages/code-size/Hawkynt/CloudForge?color=4CAF50)
+![Repo Size](https://img.shields.io/github/repo-size/Hawkynt/CloudForge?color=FF9800)
+
 ## Purpose
 
 CloudForge is an autonomous innovation-driven development orchestrator that drives an AI coding agent through structured engineering phases to complete software tasks with zero user intervention. It embeds industry-standard methodologies (IREB, DDD, BDD, TDD, ISTQB, MoSCoW) and uses innovation gates with KPIs to ensure quality. It spawns the agent as a subprocess multiple times with phase-specific prompts, maintains session continuity, handles rate limits with countdown/auto-retry, and streams output in real-time. Innovation rounds automatically loop back to discover further improvements until max iterations are reached.
@@ -157,14 +169,14 @@ Forge/
     innovate.txt        # Innovation round assessment
     status_tag.txt      # Shared CLOUDFORGE_STATUS block template
   tests/
-    tui.test.js         # TUI unit tests (91 tests)
-    runner.test.js      # Runner unit tests (27 tests)
-    ratelimit.test.js   # Rate limit handler tests (41 tests)
-    phases.test.js      # Phase engine tests (89 tests)
-    state.test.js       # State manager tests (86 tests)
-    transient.test.js   # Transient error detection tests (12 tests)
-    forge-status.test.js # Status synthesis tests (4 tests)
-  ReadMe.md
+    tui.test.js         # TUI unit tests
+    runner.test.js      # Runner unit tests
+    ratelimit.test.js   # Rate limit handler tests
+    phases.test.js      # Phase engine tests
+    state.test.js       # State manager tests
+    transient.test.js   # Transient error detection tests
+    forge-status.test.js # Status synthesis tests
+  README.md
 ```
 
 ### Architectural Patterns
