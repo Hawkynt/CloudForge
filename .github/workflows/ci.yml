@@ -1,0 +1,45 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+  # release.yml can call this via `uses: ./.github/workflows/ci.yml`
+  # so releases run the exact same matrix as per-PR CI.
+  workflow_call: {}
+
+# Force JavaScript-based actions to run on Node 24 instead of the deprecated Node 20 ahead of
+# the 2026-06-16 hard cutover, until we bump each action to a Node-24-native major version.
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
+
+jobs:
+  test:
+    name: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0                          # version.pl needs full history
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      # No compile step for plain Node -- a syntax check across every shipped
+      # source file is the closest equivalent and catches parse errors early.
+      - name: Build (syntax check)
+        shell: bash
+        run: |
+          for f in forge.js lib/*.js tests/*.js; do
+            node --check "$f"
+          done
+
+      # This tier is REQUIRED -- do NOT add continue-on-error here.
+      - name: Test
+        run: node --test

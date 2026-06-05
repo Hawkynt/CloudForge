@@ -3,6 +3,7 @@
 [![License](https://img.shields.io/github/license/Hawkynt/CloudForge)](https://github.com/Hawkynt/CloudForge/blob/main/LICENSE)
 [![Language](https://img.shields.io/github/languages/top/Hawkynt/CloudForge?color=8957D5)](https://github.com/Hawkynt/CloudForge)
 
+[![CI](https://github.com/Hawkynt/CloudForge/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/Hawkynt/CloudForge/actions/workflows/ci.yml)
 ![Last Commit](https://img.shields.io/github/last-commit/Hawkynt/CloudForge?branch=main)
 ![Activity](https://img.shields.io/github/commit-activity/m/Hawkynt/CloudForge)
 
