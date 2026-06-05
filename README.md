@@ -1,4 +1,4 @@
-# CloudForge - Autonomous AI Coding Orchestrator
+# CloudForge
 
 [![License](https://img.shields.io/github/license/Hawkynt/CloudForge)](https://github.com/Hawkynt/CloudForge/blob/main/LICENSE)
 [![Language](https://img.shields.io/github/languages/top/Hawkynt/CloudForge?color=8957D5)](https://github.com/Hawkynt/CloudForge)
@@ -12,6 +12,12 @@
 [![Issues](https://img.shields.io/github/issues/Hawkynt/CloudForge)](https://github.com/Hawkynt/CloudForge/issues)
 ![Code Size](https://img.shields.io/github/languages/code-size/Hawkynt/CloudForge?color=4CAF50)
 ![Repo Size](https://img.shields.io/github/repo-size/Hawkynt/CloudForge?color=FF9800)
+
+[![Release](https://img.shields.io/github/v/release/Hawkynt/CloudForge?sort=semver)](https://github.com/Hawkynt/CloudForge/releases/latest)
+[![Nightly](https://img.shields.io/github/v/release/Hawkynt/CloudForge?include_prereleases=true&sort=date&label=nightly&color=FF9800)](https://github.com/Hawkynt/CloudForge/releases)
+[![Downloads](https://img.shields.io/github/downloads/Hawkynt/CloudForge/total)](https://github.com/Hawkynt/CloudForge/releases)
+
+> An autonomous innovation-driven development orchestrator that drives an AI coding agent through 18 structured engineering phases (IREB, DDD, BDD, TDD, ISTQB, MoSCoW, innovation gates with KPIs) to complete software tasks with zero user intervention.
 
 ## Purpose
 
@@ -85,7 +91,7 @@ CloudForge produces these artifacts in `.cloudforge/`:
 
 Session continuity is maintained via `--resume <session-id>` so the agent retains full context across all phases.
 
-## Build/Test/Run Guidelines
+## 🛠️ Build/Test/Run Guidelines
 
 ### Prerequisites
 
@@ -191,7 +197,7 @@ Forge/
 - **Circuit breaker** - Detects stuck loops and halts gracefully
 - **Stream processing** - Parses `stream-json` output line-by-line for real-time display
 
-## Features
+## ✨ Features
 
 - [x] 18-phase innovation-driven development workflow
 - [x] IREB requirements engineering (DISCOVER, REQUIREMENTS)
@@ -305,3 +311,14 @@ Each phase loads its prompt from `prompts/<phase_name_lowercase>.txt`. Templates
 - CloudForge passes `--dangerously-skip-permissions` to the agent, granting it unrestricted filesystem and command access within the working directory
 - State files in `.cloudforge/` may contain sensitive task descriptions
 - The orchestrator does not sandbox the agent's operations beyond what the agent itself provides
+
+## ❤️ Support
+
+If this project saves you time or money, consider supporting its development:
+
+[![GitHub Sponsors](https://img.shields.io/badge/GitHub-Sponsor-EA4AAA?logo=githubsponsors)](https://github.com/sponsors/Hawkynt)
+[![PayPal](https://img.shields.io/badge/PayPal-Donate-00457C?logo=paypal)](https://www.paypal.me/hawkynt)
+
+## 📜 License
+
+Licensed under LGPL-3.0-or-later — see [LICENSE](LICENSE).
