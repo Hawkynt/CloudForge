@@ -13,7 +13,7 @@
 ![Code Size](https://img.shields.io/github/languages/code-size/Hawkynt/CloudForge?color=4CAF50)
 ![Repo Size](https://img.shields.io/github/repo-size/Hawkynt/CloudForge?color=FF9800)
 
-[![Release](https://img.shields.io/github/v/release/Hawkynt/CloudForge?sort=semver)](https://github.com/Hawkynt/CloudForge/releases/latest)
+[![Release](https://img.shields.io/github/v/release/Hawkynt/CloudForge)](https://github.com/Hawkynt/CloudForge/releases/latest)
 [![Nightly](https://img.shields.io/github/v/release/Hawkynt/CloudForge?include_prereleases&sort=date&label=nightly&color=FF9800)](https://github.com/Hawkynt/CloudForge/releases)
 [![Downloads](https://img.shields.io/github/downloads/Hawkynt/CloudForge/total)](https://github.com/Hawkynt/CloudForge/releases)
 
