@@ -14,7 +14,7 @@
 ![Repo Size](https://img.shields.io/github/repo-size/Hawkynt/CloudForge?color=FF9800)
 
 [![Release](https://img.shields.io/github/v/release/Hawkynt/CloudForge?sort=semver)](https://github.com/Hawkynt/CloudForge/releases/latest)
-[![Nightly](https://img.shields.io/github/v/release/Hawkynt/CloudForge?include_prereleases=true&sort=date&label=nightly&color=FF9800)](https://github.com/Hawkynt/CloudForge/releases)
+[![Nightly](https://img.shields.io/github/v/release/Hawkynt/CloudForge?include_prereleases&sort=date&label=nightly&color=FF9800)](https://github.com/Hawkynt/CloudForge/releases)
 [![Downloads](https://img.shields.io/github/downloads/Hawkynt/CloudForge/total)](https://github.com/Hawkynt/CloudForge/releases)
 
 > An autonomous innovation-driven development orchestrator that drives an AI coding agent through 18 structured engineering phases (IREB, DDD, BDD, TDD, ISTQB, MoSCoW, innovation gates with KPIs) to complete software tasks with zero user intervention.
