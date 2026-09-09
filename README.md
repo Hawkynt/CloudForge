@@ -19,11 +19,81 @@
 
 > An autonomous innovation-driven development orchestrator that drives an AI coding agent through 18 structured engineering phases (IREB, DDD, BDD, TDD, ISTQB, MoSCoW, innovation gates with KPIs) to complete software tasks with zero user intervention.
 
-## Purpose
+## 🧭 Vision
+
+Most attempts to get useful work out of a coding agent fail in the same place: the agent is given a
+task and no process, so it produces something plausible and stops. CloudForge supplies the process —
+eighteen structured engineering phases, borrowed from disciplines that already know how to take a
+requirement to a tested change, with gates between them that have to be satisfied before the next
+phase starts.
+
+The goal is completion without supervision: not a faster way to prompt, but a loop that can be left
+alone and still arrive somewhere defensible.
+
+## ✨ Features
+
+- [x] 18-phase innovation-driven development workflow
+- [x] IREB requirements engineering (DISCOVER, REQUIREMENTS)
+- [x] Per-feature PRD generation (REQUIREMENTS, validated in GATE_SCOPE/REVIEW)
+- [x] Living story/feature tracker with status lifecycle (REQUIREMENTS -> VERIFY -> REVIEW)
+- [x] INVEST enforcement on all stories (REQUIREMENTS, GATE_SCOPE)
+- [x] KISS/YAGNI discipline throughout implementation (DESIGN, PLAN, IMPLEMENT, REFACTOR, gates)
+- [x] Semantic type enforcement - domain concepts as distinct types, not bare primitives (DOMAIN, DESIGN, IMPLEMENT, REFACTOR, gates)
+- [x] MoSCoW prioritization and MVP scope definition (PRIORITIZE)
+- [x] DDD domain modeling (DOMAIN, enforced in IMPLEMENT/REFACTOR)
+- [x] BDD behavior scenarios (BDD, referenced in TEST/VERIFY)
+- [x] TDD red-green-refactor cycle (TEST, IMPLEMENT, REFACTOR)
+- [x] ISTQB test design techniques (TEST, VERIFY, INTEGRATE)
+- [x] Innovation gates with go/no-go decisions (GATE_SCOPE, GATE_DESIGN, GATE_QUALITY)
+- [x] KPI definition and evaluation (PRIORITIZE, GATE_QUALITY)
+- [x] Technical prototyping/spikes (PROTOTYPE)
+- [x] Innovation rounds with automatic looping (INNOVATE -> DISCOVER)
+- [x] Integration and system testing (INTEGRATE)
+- [x] Data-driven workflow state machine (`prompts/workflow.dot`)
+- [x] Editable prompt templates (`prompts/*.txt`)
+- [x] Agent subprocess management with stream-json parsing
+- [x] Session continuity via `--resume`
+- [x] Rate limit detection with +30s safety buffer
+- [x] Absolute reset time parsing ("resets 1am", "resets Mar 9, 11am (Europe/Berlin)" with timezone support)
+- [x] Smart attempt counting (known reset times don't burn retry attempts)
+- [x] Countdown timer with auto-retry and exponential backoff
+- [x] Rich TUI with box-drawing, KPI dashboard, and phase result boxes
+- [x] Phase progress bar visualization (grouped by Discovery/Design/Task Loop/Integration)
+- [x] Evidence-based verification - VERIFY/GATE_QUALITY/REVIEW/INNOVATE require concrete proof (test output, code inspection)
+- [x] Reachability enforcement - features must be wired into the application, not just tested in isolation (IMPLEMENT, VERIFY, INTEGRATE, GATE_QUALITY, REVIEW)
+- [x] Real-time streaming output with ANSI colors and timestamps
+- [x] State persistence and resume support (`.cloudforge/state.json`)
+- [x] Auto-resume from `.cloudforge/` when no arguments given
+- [x] Per-session iteration budget extension on resume (iteration is cumulative, budget resets)
+- [x] Artifact-based state recovery (corrupt/missing `state.json` fallback)
+- [x] Circuit breaker (stuck detection)
+- [x] Dry-run mode
+- [x] Graceful Ctrl+C shutdown with state save
+- [x] Verbose/debug mode (`-v`)
+- [x] Agent crash detection
+- [x] Transient API error detection (500/502/503, connection errors) with automatic retry
+- [x] Null-status synthesis (agents that omit CLOUDFORGE_STATUS trigger retry, not silent advance)
+- [x] API contract/signature verification in quality gates (VERIFY, REVIEW, GATE_QUALITY)
+
+## 📦 Installation
+
+Clone the repository and run it in place — see [Building](#-building) for the toolchain it expects.
+
+## 🚀 Quick start
+
+```bash
+# Direct invocation
+./cloudforge.ps1 -Task "your task here"
+
+# Auto-resume, picking up where it left off from .cloudforge/
+./cloudforge.ps1
+```
+
+## 🎯 Purpose
 
 CloudForge is an autonomous innovation-driven development orchestrator that drives an AI coding agent through structured engineering phases to complete software tasks with zero user intervention. It embeds industry-standard methodologies (IREB, DDD, BDD, TDD, ISTQB, MoSCoW) and uses innovation gates with KPIs to ensure quality. It spawns the agent as a subprocess multiple times with phase-specific prompts, maintains session continuity, handles rate limits with countdown/auto-retry, and streams output in real-time. Innovation rounds automatically loop back to discover further improvements until max iterations are reached.
 
-## How It Works
+## ⚙️ How it works
 
 CloudForge invokes the AI agent CLI in a structured loop of 18 phases:
 
@@ -91,57 +161,7 @@ CloudForge produces these artifacts in `.cloudforge/`:
 
 Session continuity is maintained via `--resume <session-id>` so the agent retains full context across all phases.
 
-## 🛠️ Build/Test/Run Guidelines
-
-### Prerequisites
-
-- Node.js (any version supporting CommonJS)
-- An AI coding agent CLI installed and accessible (e.g. `claude` command or `cli.js`)
-
-### Running
-
-```bash
-# Direct invocation
-node forge.js "Your task description here"
-
-# Auto-resume (picks up where it left off from .cloudforge/)
-node forge.js
-
-# Via batch launcher (sets up environment)
-cloudforge "Your task description here"
-
-# With options
-node forge.js "Add JWT auth" --max-iterations 50 --model opus --working-dir ./myproject
-
-# Dry run (show plan without executing)
-node forge.js "Add JWT auth" --dry-run
-
-# Resume a previous session (legacy, prefer auto-resume)
-node forge.js --continue-session <session-id>
-```
-
-### CLI Arguments
-
-| Argument              | Default       | Description                                              |
-| --------------------- | ------------- | -------------------------------------------------------- |
-| `[task]` (positional) | optional      | Task description (auto-resumes from .cloudforge/ if omitted) |
-| `--max-iterations`    | `100`         | Per-session iteration budget (extends on resume)         |
-| `--max-phase-retries` | `3`           | Max retries per phase before moving on                   |
-| `--model`             | auto          | Model (sonnet/opus/haiku)                                |
-| `--working-dir`       | `cwd`         | Project directory                                        |
-| `--max-turns`         | `50`          | Max agentic turns per invocation                         |
-| `--continue-session`  | `null`        | Resume previous session by ID (legacy)                   |
-| `--dry-run`           | `false`       | Show planned phase sequence without executing            |
-| `--rate-limit-wait`   | `43200` (12h) | Max seconds to wait on rate limit                        |
-| `-v, --verbose`       | `false`       | Show debug output (spawn cmd, stderr, events)            |
-
-### Testing
-
-```bash
-node --test tests/*.test.js
-```
-
-## Structure
+## 📁 Structure
 
 ```
 Forge/
@@ -197,52 +217,7 @@ Forge/
 - **Circuit breaker** - Detects stuck loops and halts gracefully
 - **Stream processing** - Parses `stream-json` output line-by-line for real-time display
 
-## ✨ Features
-
-- [x] 18-phase innovation-driven development workflow
-- [x] IREB requirements engineering (DISCOVER, REQUIREMENTS)
-- [x] Per-feature PRD generation (REQUIREMENTS, validated in GATE_SCOPE/REVIEW)
-- [x] Living story/feature tracker with status lifecycle (REQUIREMENTS -> VERIFY -> REVIEW)
-- [x] INVEST enforcement on all stories (REQUIREMENTS, GATE_SCOPE)
-- [x] KISS/YAGNI discipline throughout implementation (DESIGN, PLAN, IMPLEMENT, REFACTOR, gates)
-- [x] Semantic type enforcement - domain concepts as distinct types, not bare primitives (DOMAIN, DESIGN, IMPLEMENT, REFACTOR, gates)
-- [x] MoSCoW prioritization and MVP scope definition (PRIORITIZE)
-- [x] DDD domain modeling (DOMAIN, enforced in IMPLEMENT/REFACTOR)
-- [x] BDD behavior scenarios (BDD, referenced in TEST/VERIFY)
-- [x] TDD red-green-refactor cycle (TEST, IMPLEMENT, REFACTOR)
-- [x] ISTQB test design techniques (TEST, VERIFY, INTEGRATE)
-- [x] Innovation gates with go/no-go decisions (GATE_SCOPE, GATE_DESIGN, GATE_QUALITY)
-- [x] KPI definition and evaluation (PRIORITIZE, GATE_QUALITY)
-- [x] Technical prototyping/spikes (PROTOTYPE)
-- [x] Innovation rounds with automatic looping (INNOVATE -> DISCOVER)
-- [x] Integration and system testing (INTEGRATE)
-- [x] Data-driven workflow state machine (`prompts/workflow.dot`)
-- [x] Editable prompt templates (`prompts/*.txt`)
-- [x] Agent subprocess management with stream-json parsing
-- [x] Session continuity via `--resume`
-- [x] Rate limit detection with +30s safety buffer
-- [x] Absolute reset time parsing ("resets 1am", "resets Mar 9, 11am (Europe/Berlin)" with timezone support)
-- [x] Smart attempt counting (known reset times don't burn retry attempts)
-- [x] Countdown timer with auto-retry and exponential backoff
-- [x] Rich TUI with box-drawing, KPI dashboard, and phase result boxes
-- [x] Phase progress bar visualization (grouped by Discovery/Design/Task Loop/Integration)
-- [x] Evidence-based verification - VERIFY/GATE_QUALITY/REVIEW/INNOVATE require concrete proof (test output, code inspection)
-- [x] Reachability enforcement - features must be wired into the application, not just tested in isolation (IMPLEMENT, VERIFY, INTEGRATE, GATE_QUALITY, REVIEW)
-- [x] Real-time streaming output with ANSI colors and timestamps
-- [x] State persistence and resume support (`.cloudforge/state.json`)
-- [x] Auto-resume from `.cloudforge/` when no arguments given
-- [x] Per-session iteration budget extension on resume (iteration is cumulative, budget resets)
-- [x] Artifact-based state recovery (corrupt/missing `state.json` fallback)
-- [x] Circuit breaker (stuck detection)
-- [x] Dry-run mode
-- [x] Graceful Ctrl+C shutdown with state save
-- [x] Verbose/debug mode (`-v`)
-- [x] Agent crash detection
-- [x] Transient API error detection (500/502/503, connection errors) with automatic retry
-- [x] Null-status synthesis (agents that omit CLOUDFORGE_STATUS trigger retry, not silent advance)
-- [x] API contract/signature verification in quality gates (VERIFY, REVIEW, GATE_QUALITY)
-
-## Planned Features
+## 🗺️ Planned features
 
 - [ ] Multi-project orchestration (run CloudForge across multiple repos)
 - [ ] HTML report generation for completed runs
@@ -250,7 +225,7 @@ Forge/
 - [ ] Parallel sub-task execution
 - [ ] Pluggable agent backends
 
-## Customizing the Workflow
+## 🔧 Customizing the workflow
 
 The phase sequence and transitions are defined in `prompts/workflow.dot` using a DOT-like graph syntax:
 
@@ -296,7 +271,13 @@ Each phase loads its prompt from `prompts/<phase_name_lowercase>.txt`. Templates
 - `{workingDir}` - Working directory path
 - `{status_tag}` - Expands to the shared CLOUDFORGE_STATUS block from `status_tag.txt`
 
-## Known Bugs and Limitations
+## 🛡️ Security implications
+
+- CloudForge passes `--dangerously-skip-permissions` to the agent, granting it unrestricted filesystem and command access within the working directory
+- State files in `.cloudforge/` may contain sensitive task descriptions
+- The orchestrator does not sandbox the agent's operations beyond what the agent itself provides
+
+## ⚠️ Limitations
 
 - Windows-only batch launcher (Linux/Mac users invoke `node forge.js` directly)
 - Relies on an AI coding agent CLI being installed and the `claude` command or `cli.js` being accessible
@@ -306,11 +287,55 @@ Each phase loads its prompt from `prompts/<phase_name_lowercase>.txt`. Templates
 - No encryption or access control on `.cloudforge/state.json`
 - Innovation rounds depend on the agent's judgment in the INNOVATE phase for loop-or-stop decisions
 
-## Security Implications
+## 🛠️ Building
 
-- CloudForge passes `--dangerously-skip-permissions` to the agent, granting it unrestricted filesystem and command access within the working directory
-- State files in `.cloudforge/` may contain sensitive task descriptions
-- The orchestrator does not sandbox the agent's operations beyond what the agent itself provides
+### Prerequisites
+
+- Node.js (any version supporting CommonJS)
+- An AI coding agent CLI installed and accessible (e.g. `claude` command or `cli.js`)
+
+### Running
+
+```bash
+# Direct invocation
+node forge.js "Your task description here"
+
+# Auto-resume (picks up where it left off from .cloudforge/)
+node forge.js
+
+# Via batch launcher (sets up environment)
+cloudforge "Your task description here"
+
+# With options
+node forge.js "Add JWT auth" --max-iterations 50 --model opus --working-dir ./myproject
+
+# Dry run (show plan without executing)
+node forge.js "Add JWT auth" --dry-run
+
+# Resume a previous session (legacy, prefer auto-resume)
+node forge.js --continue-session <session-id>
+```
+
+### CLI Arguments
+
+| Argument              | Default       | Description                                              |
+| --------------------- | ------------- | -------------------------------------------------------- |
+| `[task]` (positional) | optional      | Task description (auto-resumes from .cloudforge/ if omitted) |
+| `--max-iterations`    | `100`         | Per-session iteration budget (extends on resume)         |
+| `--max-phase-retries` | `3`           | Max retries per phase before moving on                   |
+| `--model`             | auto          | Model (sonnet/opus/haiku)                                |
+| `--working-dir`       | `cwd`         | Project directory                                        |
+| `--max-turns`         | `50`          | Max agentic turns per invocation                         |
+| `--continue-session`  | `null`        | Resume previous session by ID (legacy)                   |
+| `--dry-run`           | `false`       | Show planned phase sequence without executing            |
+| `--rate-limit-wait`   | `43200` (12h) | Max seconds to wait on rate limit                        |
+| `-v, --verbose`       | `false`       | Show debug output (spawn cmd, stderr, events)            |
+
+### Testing
+
+```bash
+node --test tests/*.test.js
+```
 
 ## ❤️ Support
 
